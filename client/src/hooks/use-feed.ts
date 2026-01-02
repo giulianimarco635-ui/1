@@ -1,15 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { api, type CatalogResponse } from "@shared/routes";
+import { api } from "@shared/routes";
 
-// URL del backend letto dalla variabile ambiente di Vite
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function useFeed() {
-  return useQuery<CatalogResponse>({
+  return useQuery({
     queryKey: [api.feed.get.path],
     queryFn: async () => {
-      // Costruisce l'URL completo: https://one-85nh.onrender.com + /feed (o qualunque sia il path)
-      const res = await fetch(API_URL + api.feed.get.path);
+      const res = await fetch(API_URL + "/api/feed");
 
       if (!res.ok) {
         throw new Error("Failed to fetch catalog");
