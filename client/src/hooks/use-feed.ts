@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import { api } from "@shared/routes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function useFeed() {
   return useQuery({
-    queryKey: ["feed"],
+    queryKey: [api.feed.get.path],
     queryFn: async () => {
       const res = await fetch(API_URL + "/api/feed");
 
@@ -12,25 +13,7 @@ export function useFeed() {
         throw new Error("Failed to fetch catalog");
       }
 
-      const json = await res.json();
-
-      // Estrarre TUTTI gli episodi da tutti gli anni e mesi
-      const audio = json.audio || {};
-      const allEpisodes: any[] = [];
-
-      for (const yearKey of Object.keys(audio)) {
-        const yearObj = audio[yearKey];
-        if (!yearObj?.months) continue;
-
-        for (const monthKey of Object.keys(yearObj.months)) {
-          const monthObj = yearObj.months[monthKey];
-          if (!monthObj?.episodes) continue;
-
-          allEpisodes.push(...monthObj.episodes);
-        }
-      }
-
-      return allEpisodes;
+      return api.feed.get.responses[200].parse(await res.json());
     },
   });
 }
