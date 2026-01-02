@@ -2,15 +2,15 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
-import cors from "cors";   // <--- AGGIUNTO QUI
+import cors from "cors";
 
 const app = express();
 const httpServer = createServer(app);
 
-// 🔥 ABILITA CORS PER VERCEL
+// ✅ CORS configurato per Vercel
 app.use(
   cors({
-    origin: "*", // puoi mettere anche il dominio Vercel se vuoi
+    origin: "https://1-two-dusky.vercel.app", // ← dominio frontend Vercel
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   })
